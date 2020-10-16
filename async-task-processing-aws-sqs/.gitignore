@@ -1,0 +1,48 @@
+# OS generated file
+# =================
+.DS_Store
+
+# Node and related ecosystem
+# ==========================
+npm-debug.log
+node_modules/
+
+# MEAN.js app and assets
+# ======================
+dist/
+
+# API keys file
+# ==============
+!.ebextensions/*.config
+*.env
+*.pem
+*.cert
+*spcp-cert.pem
+*formsg-cert.pem
+*formsg-key.pem
+*passphrase*
+*.key
+
+# Sublime editor
+# ==============
+*.sublime-project
+*.sublime-workspace
+
+# General
+# =======
+*.log
+*.csv
+*.dat
+*.out
+*.pid
+*.gz
+*.tmp
+*.bak
+*.swp
+logs/
+build/
+tmp/
+
+# Localstack
+# =======
+.localstack

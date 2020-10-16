@@ -1,0 +1,53 @@
+version: '3'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: app/Dockerfile.app
+    depends_on:
+      - localstack
+    volumes:
+      - ./:/opt/app
+      - /opt/app/node_modules
+    ports:
+      - '5000:5000'
+    environment:
+      - NODE_ENV=development
+      - AWS_ACCESS_KEY_ID=random
+      - AWS_SECRET_ACCESS_KEY=random
+      - AWS_REGION=ap-southeast-1
+      - TASK_QUEUE_URL=http://localstack:4566/000000000000/FibonacciTaskQueue
+      - STATUS_QUEUE_URL=http://localstack:4566/000000000000/FibonacciStatusQueue
+  worker:
+    scale: 2
+    build:
+      context: .
+      dockerfile: worker/Dockerfile.worker
+    depends_on:
+      - localstack
+      - app
+    volumes:
+      - ./:/opt/worker
+      - /opt/worker/node_modules
+    ports:
+      - '4000'
+    environment:
+      - NODE_ENV=development
+      - AWS_ACCESS_KEY_ID=random
+      - AWS_SECRET_ACCESS_KEY=random
+      - AWS_REGION=ap-southeast-1
+      - TASK_QUEUE_URL=http://localstack:4566/000000000000/FibonacciTaskQueue
+      - STATUS_QUEUE_URL=http://localstack:4566/000000000000/FibonacciStatusQueue
+  localstack:
+    image: localstack/localstack
+    ports:
+      - '4566:4566'
+    environment:
+      - SERVICES=sqs
+      - DATA_DIR=/tmp/localstack/data # Local directory for saving persistent data
+      - HOSTNAME=localstack
+      - HOSTNAME_EXTERNAL=localstack
+    volumes:
+      - './.localstack:/tmp/localstack' # Local directory for saving persistent data
+      - '/var/run/docker.sock:/var/run/docker.sock' # Custom SSL
+      - './docker-entrypoint-initaws.d:/docker-entrypoint-initaws.d' # Init scripts to set up mock AWS infrastructure
