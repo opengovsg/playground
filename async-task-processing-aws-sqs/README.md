@@ -8,6 +8,8 @@ Some example of tasks that may necessitate the use of queues:
 - Computationally expensive tasks e.g. machine learning model training/long-running inference tasks
 - Spreading out a large amount of I/O over time e.g. database inserts, analytics collection
 
+Generally, using message queues can help to decouple application components, so that they can run and fail independently. It also helps to make applications fault-tolerant and easier to scale.
+
 ## Messaging concepts
 
 This repository demonstrates asynchronous task processing and the [Request-Reply pattern](https://www.enterpriseintegrationpatterns.com/patterns/messaging/RequestReply.html) via the use of [Point-to-point Channels](https://www.enterpriseintegrationpatterns.com/patterns/messaging/PointToPointChannel.html) in the form of [AWS SQS Standard Queues](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/standard-queues.html). When a GET request is made to the `/fibonacci` endpoint of the app server, a message is sent to the queue which uses [Timeout-based Delivery](https://www.cloudcomputingpatterns.org/timeout_based_delivery/). Each worker is a [Polling Consumer](https://www.enterpriseintegrationpatterns.com/patterns/messaging/PollingConsumer.html) that need to process each message within a visibility timeout period. Multiple workers act together as [Competing Consumers](https://www.enterpriseintegrationpatterns.com/patterns/messaging/CompetingConsumers.html) to process the messages in parallel. This application is also designed as an [Idempotent Receiver](https://www.enterpriseintegrationpatterns.com/patterns/messaging/IdempotentReceiver.html) which is able to safely receive duplicate messages.
