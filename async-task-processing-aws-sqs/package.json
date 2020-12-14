@@ -24,7 +24,7 @@
   "dependencies": {
     "aws-sdk": "^2.773.0",
     "express": "^4.17.1",
-    "sqs-consumer": "^5.4.0",
+    "sqs-consumer": "^5.5.0",
     "uuid": "^8.3.1"
   }
 }
